@@ -54,11 +54,6 @@ function guardarCliente(){
     alert("Ingresa una valor valido para egresos");
     return;
   }
-   let existe = clientes.some(clientes => clientes.cedula === cedula);
-    if (existe) {
-        alert("Ya existe un cliente con la cédula: " + cedula);
-        return;
-    }
   let nuevoCliente = {
     cedula: cedula,
     nombre: nombre,
@@ -66,8 +61,40 @@ function guardarCliente(){
     ingresos: ingresos,
     egresos: egresos,
   };
+  clientes.push(nuevoCliente);
+
   alert("Cliente agregado correctamente");
-    limpiarFormulario();
+    
     pintarTablaClientes();  
 }
 
+//pintar tabla cliente
+function pintarTablaClientes() {
+    let cmpTabla = document.getElementById("tablaClientes");
+    // Crear tabla con encabezados
+    let contenidoTabla = "";
+
+    // Recorrer clientes
+    for (let i = 0; i < clientes.length; i++) {
+        let cliente = clientes[i];
+        contenidoTabla += `
+            <tr>
+                <td>${cliente.cedula}</td>
+                <td>${cliente.nombre}</td>
+                <td>${cliente.apellido}</td>
+                <td>${cliente.ingresos}</td>
+                <td>${cliente.egresos}</td>
+                 <td>
+                    <button onclick="cargarCliente(${i})">Actualizar</button> 
+                </td>
+            </tr>
+        `;
+    }
+
+    contenidoTabla += `
+            </tbody>
+        </table>
+    `;
+
+    cmpTabla.innerHTML = contenidoTabla;
+}
