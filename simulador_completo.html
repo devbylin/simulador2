@@ -14,9 +14,12 @@
 
     <nav>
       <button onclick="mostrarSeccionParametros();">Parámetros</button>
-      <button onclick="mostrarSeccionClientes()";>Clientes</button>
+      <button onclick="mostrarSeccionClientes();">Clientes</button>
+      <button onclick="mostrarSeccionCreditos();">Creditos</button>
     </nav>
 
+
+      <!--SECCION PARAMETROS-->
     <section id="parametros">
       <h2>Configurar Parámetros</h2>
 
@@ -34,6 +37,32 @@
       <p id="mensajeTasa"></p>
     </section>
 
+
+
+    <!--SECCION DE CREDITOS-->
+    <section id="creditos">
+      <h2>Solicitar Crédito</h2>
+
+      <input type="text" id="buscarCedulaCredito" placeholder="Cedula del cliente">
+      <button onclick="buscarClienteCredito()">Buscar cliente</button>
+
+      <div id="datosClienteCredito" class="card"></div>
+
+      <input type="number" id="montoCredito" placeholder="Monto solicitado">
+      <input type="number" id="plazoCredito" placeholder=" Plazo (meses)">
+      <button onclick="calcularCredito()">Calcular crédito</button>
+      <br>
+
+      <div id="resultadoCredito"></div>
+
+      <button id="btnSolicitarCredito" onclick="solicitarCredito()" disabled>
+      Solicitar crédito
+      </button>
+    </section>
+
+
+
+    <!--SECCION CLIENTES-->
     <section id="clientes">
       <h2>Registro de Clientes</h2>
 
@@ -101,5 +130,6 @@
 
   <script src="simulador_completo.js"></script>
   <script src="utilitarios.js"></script>
+  <script src="logicaDeCredito.js"></script>
   </body>
 </html>
