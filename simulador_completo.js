@@ -15,6 +15,7 @@ function ocultarSecciones(){
   document.getElementById("parametros").classList.remove("activa");
   document.getElementById("clientes").classList.remove("activa");
   document.getElementById("creditos").classList.remove("activa");
+  document.getElementById("listaCreditos").classList.remove("activa");
 }
 function mostrarSeccionParametros(parametros){
   ocultarSecciones();
@@ -27,6 +28,10 @@ function mostrarSeccionClientes(clientes){
 function mostrarSeccionCreditos(creditos){
   ocultarSecciones()
   document.getElementById("creditos").classList.add("activa");
+}
+function mostrarSeccionHistCreditos(listaCreditos){
+  ocultarSecciones()
+  document.getElementById("listaCreditos").classList.add("activa");
 }
 function guardarTasa(){
   let valor = recuperarFloat("tasaInteres");
@@ -108,6 +113,7 @@ function pintarTablaClientes() {
     </tbody>
     </table>`;
   cmpTabla.innerHTML = contenidoTabla;
+  pintarCreditos(creditos);
 }
 function buscarCliente(cedula){
   for(let i = 0; i < clientes.length; i++){
@@ -279,23 +285,77 @@ function solicitarCredito() {
         nombre: clienteSeleccionado.nombre,
         apellido: clienteSeleccionado.apellido,
         monto: montoCalculado,
+        tasa: tasaInteres,
         plazo: plazoCalculado,
         cuota: cuotaCalculada,
         estado: "Aprobado"
     };
-
     // Agregar al arreglo de créditos
     creditos.push(nuevoCredito);
 
     alert("✅ Crédito solicitado correctamente");
+   
 
     // Limpiar campos
     document.getElementById("montoCredito").value = "";
     document.getElementById("plazoCredito").value = "";
+    document.getElementById("mensajeTasa").value = "";
     document.getElementById("resultadoCredito").innerHTML = "";
     document.getElementById("resultadoCredito").className = "";
     document.getElementById("btnSolicitarCredito").disabled = true;
-
-    console.log("📊 Créditos:", creditos);
 }
+function buscarCreditos(cedula){
+    let creditosCliente = [];
+    for(let i = 0; i < creditos.length; i++){
+      if(creditos[i].cedula == cedula){
+        creditosCliente.push(creditos[i]);
+      }
+    }
+    return creditosCliente;
+}
+function pintarCreditos(creditos){
+  let cmpTabla = document.getElementById("tablaCreditos");
 
+  if(!cmpTabla){
+  console.error("no se encontro el elemento con id 'tablaCreditos'");
+  return;
+  }
+  if(!creditos || creditos.length == 0){
+    cmpTabla.innerHTML = `
+      <tr>
+          <td colspan="7" style="text-align: center; padding: 30px; color: #94a3b8;">
+              📋 No hay créditos registrados
+          </td>
+      </tr>
+    `;
+    return
+  }
+  let contenidoTabla = "";
+  for(let i = 0; i < creditos.length; i++){
+    let credito = creditos[i];
+    let colorEstado = credito.estado == "Aprobado" ? "#22c55e" : "#ef4444";
+
+  contenidoTabla += `
+    <tr>
+        <td>${credito.cedula}</td>
+        <td>${credito.nombre}</td>
+        <td>${credito.apellido}</td>
+        <td>$${credito.monto.toFixed(2)}</td>
+        <td>${credito.tasa}%</td>
+        <td>${credito.plazo} meses</td>
+        <td>$${credito.cuota.toFixed(2)}</td>
+    </tr>
+  `;
+  }
+  cmpTabla.innerHTML = contenidoTabla;
+}
+function buscarCreditosCliente(){
+
+  let cedula = recuperarTexto("buscarCedulaCredito").trim();
+    if (cedula === "") {
+        alert("⚠️ Ingresa una cédula para buscar sus créditos");
+        return;
+    }
+    let creditosEncontrados = buscarCreditos(cedula);
+    pintarCreditos(creditosEncontrados);
+}
